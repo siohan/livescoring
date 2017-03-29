@@ -38,7 +38,7 @@ $flds = "
 	description C(255),
 	type_competition C(200),
 	tour I(2),
-	date_compet T,
+	date_compet D,
 	locaux C(150),
 	adversaires C(150),
 	score_locaux I(2) DEFAULT '0',
@@ -110,8 +110,35 @@ $flds = "
 	joueur2 C(255),
 	vicA I(1) DEFAULT 0,
 	vicW I(1) DEFAULT 0,
-	ecart I(2) DEFAULT 0";
+	statut I(1) DEFAULT 0,
+	score C(100)";
 	$sqlarray = $dict->CreateTableSQL( cms_db_prefix()."module_livescoring_parties", $flds, $taboptarray);
+	$dict->ExecuteSQLArray($sqlarray);			
+//
+// mysql-specific, but ignored by other database
+$taboptarray = array( 'mysql' => 'ENGINE=MyISAM' );
+
+$dict = NewDataDictionary( $db );
+
+// table schema description
+$flds = "
+	id I(11) AUTO KEY,
+	renc_id I(11) ,
+	partie C(5),
+	joueur1 C(255),
+	joueur2 C(255),
+	numero_set I(1),
+	scoreA I(2),
+	scoreW I(2),
+	statut I(1) DEFAULT 0,
+	vicA I(1) DEFAULT 0,
+	vicW I(1) DEFAULT 0,
+	ecart I(2),
+	set_end I(1),	
+	timbre D,
+	service C(1),
+	affichage_service C(1)";
+	$sqlarray = $dict->CreateTableSQL( cms_db_prefix()."module_livescoring_live_parties", $flds, $taboptarray);
 	$dict->ExecuteSQLArray($sqlarray);			
 //
 //les index
@@ -130,9 +157,18 @@ $sqlarray = $dict->CreateIndexSQL(cms_db_prefix().'rencontres',
 	    cms_db_prefix().'module_livescoring_rencontres', 'renc_id',$idxoptarray);
 	       $dict->ExecuteSQLArray($sqlarray);
 //
+//
+$idxoptarray = array('UNIQUE');
+$sqlarray = $dict->CreateIndexSQL(cms_db_prefix().'live_parties',
+	    cms_db_prefix().'module_livescoring_live_parties', 'renc_id, partie, numero_set',$idxoptarray);
+	       $dict->ExecuteSQLArray($sqlarray);
+//
 //	
 //Permissions
-$this->CreatePermission('Use Livescoring', 'Utiliser le module Livescoring');
+$this->CreatePermission('Live use', 'Utiliser le module Livescoring');
+
+$this->AddEventHandler('Core', 'ContentPostRender', false);
+
 // put mention into the admin log
 $this->Audit( 0, 
 	      $this->Lang('friendlyname'), 

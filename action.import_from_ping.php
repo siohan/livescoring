@@ -2,13 +2,17 @@
 
 if(!isset($gCms)) exit;
 $db =& $this->GetDb();
-/*
-if(!$this->CheckPremission('Use Livescoring'))
+
+if(!$this->CheckPermission('Live use'))
 {
 	echo $this->ShowErrors($this->Lang('needpermission'));
 	return;
 }
-*/
+/*
+$smarty->assign('form_start',
+		$this->CreateFormStart());
+*/		
+
 $ping = cms_utils::get_module('Ping');
 $nom_equipes = $ping->GetPreference('nom_equipes');
 //echo $nom_equipes;
@@ -16,7 +20,8 @@ $parms = array();
 $saison = $ping->GetPreference('saison_en_cours');
 $aujourdhui = date('Y-m-d');
 //echo "la saison est : ".$saison;
-$query = "SELECT renc_id, saison, libelle, date_event, equa, equb, lien FROM ".cms_db_prefix()."module_ping_poules_rencontres WHERE saison = ? AND date_event > ? AND club = 1"; 
+$query = "SELECT renc_id, saison, libelle, date_event, equa, equb, lien FROM ".cms_db_prefix()."module_ping_poules_rencontres WHERE saison = ? AND date_event > ?";
+$query.= " AND club = 1"; 
 $parms['saison'] = $saison;
 $parms['date_event'] = $aujourdhui;
 

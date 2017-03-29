@@ -9,7 +9,7 @@ if(!$this->CheckPermission('Live use'))
 }
 $db =& $this->GetDb();
 global $themeObject;
-debug_display($params, 'Parameters');
+//debug_display($params, 'Parameters');
 
 $renc_id = '';
 if(isset($params['renc_id']) && $params['renc_id'] != '')
@@ -21,6 +21,8 @@ else
 	$this->SetMessage('Le numéro de la rencontre est manquant !');
 	$this->RedirectToAdminTab('lives');
 }
+$smarty->assign('retour',
+		$this->CreateLink($id, 'composition',$returnid, '<< Retour', array("renc_id"=>$renc_id)));
 $query = "SELECT renc_id, partie, joueur1, joueur2, vicA, vicW, statut FROM ".cms_db_prefix()."module_livescoring_parties WHERE renc_id = ? ORDER BY id ASC";
 $dbresult = $db->Execute($query, array($renc_id));
 $rowarray = array();
@@ -39,8 +41,12 @@ if($dbresult && $dbresult->RecordCount() >0)
 		$onerow->statut = $row['statut'];
 		$onerow->vicA = $row['vicA'];
 		$onerow->vicW = $row['vicW'];
-		$onerow->plus1 = $this->CreateLink($id, 'score', $returnid, '+', array( "renc_id"=>$row['renc_id'],"partie"=>$row['partie'], "joueur"=>"A"));
-		
+		$onerow->plusA1 = $this->CreateLink($id, 'score', $returnid, '+', array( "objet"=>"partie","renc_id"=>$row['renc_id'],"partie"=>$row['partie'], "vic"=>"A"));
+		$onerow->plusW1 = $this->CreateLink($id, 'score', $returnid, '+', array( "objet"=>"partie","renc_id"=>$row['renc_id'],"partie"=>$row['partie'], "vic"=>"W"));
+		/*
+		$onerow->moinsA1 = $this->CreateLink($id, 'score', $returnid, '+', array( "objet"=>"partie","renc_id"=>$row['renc_id'],"partie"=>$row['partie'], "vic"=>"A"));
+		$onerow->moinsW1 = $this->CreateLink($id, 'score', $returnid, '+', array( "objet"=>"partie","renc_id"=>$row['renc_id'],"partie"=>$row['partie'], "vic"=>"A"));
+		*/
 		if($statut == 1)
 		{
 			$onerow->live = $this->CreateLink($id, 'live_parties', $returnid, 'Accèdér au live', array("renc_id"=>$row['renc_id']));

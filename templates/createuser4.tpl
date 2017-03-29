@@ -1,6 +1,6 @@
 
 <div class="pageoverflow">
-	{$next_step}
+	<p>{$retour} - {$next_step}</p>
 	{$formstart}
 	{$formhidden}
 	<p>Locaux : {$locaux}</p>
@@ -48,7 +48,7 @@
 </div>
 
 <div class="pageoverflow">
-<p>{$submit} {$maj} {$back}</p>
+<p>{$submit} {$maj}</p>
 </div>
 {$formend}
 </div>

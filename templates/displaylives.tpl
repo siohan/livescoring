@@ -19,6 +19,7 @@
 	<td>{$entry->locaux}</td>
 	<td>{$entry->score_locaux} - {$entry->score_adversaires}</td>
 	<td>{$entry->adversaires}</td>
+	<td>{$entry->feuille}</td>
   </tr>
 {/foreach}
  </tbody>

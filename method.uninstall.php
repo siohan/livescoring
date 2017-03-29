@@ -50,6 +50,12 @@ $dict->ExecuteSQLArray($sqlarray);
 $sqlarray = $dict->DropTableSQL( cms_db_prefix()."module_livescoring_compositions" );
 $dict->ExecuteSQLArray($sqlarray);
 
+$sqlarray = $dict->DropTableSQL( cms_db_prefix()."module_livescoring_live_parties" );
+$dict->ExecuteSQLArray($sqlarray);
+
+$sqlarray = $dict->DropTableSQL( cms_db_prefix()."module_livescoring_locaux" );
+$dict->ExecuteSQLArray($sqlarray);
+
 // remove the permissions
 $this->RemovePermission('Live Use');
 

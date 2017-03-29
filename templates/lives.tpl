@@ -1,7 +1,7 @@
 <div class="pageoptions"><p class="pageoptions">{$itemcount}&nbsp;{$itemsfound}</p></div>
 
 {if $itemcount > 0}
-<div class="pageoptions<"><p><span class="pageoptions warning">{$add_edit_live} </span></p></div>
+
 <table class="pagetable table-bordered">
  <thead>
 	<tr>

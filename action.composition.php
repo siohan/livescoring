@@ -9,7 +9,7 @@ if(!$this->CheckPermission('Live use'))
 }
 $db =& $this->GetDb();
 global $themeObject;
-debug_display($params, 'Parameters');
+//debug_display($params, 'Parameters');
 
 
 $renc_id = '';
@@ -49,7 +49,8 @@ if($dbresult)
 	$joueurZ = $row['joueurZ'];
 	*/
 	//on a une composition en bdd
-	
+$smarty->assign('retour',
+ 		$this->CreateLink($id, 'defaultadmin',$returnid, '<< Retour'));	
 $smarty->assign('next_step', 
 		$this->CreateLink($id, 'ordre_parties', $returnid, 'Etape suivante >>',array("renc_id"=>$renc_id)));
 $smarty->assign('formstart',
@@ -81,9 +82,6 @@ $smarty->assign('submit',
 		$this->CreateInputSubmit($id, 'submit', 'Enregistrer'), 'class="button"');
 $smarty->assign('maj',
 		$this->CreateInputSubmit($id,'submit','Modifier'));
-$smarty->assign('back',
-		$this->CreateInputSubmit($id,'back',
-					$this->Lang('back')));
 $smarty->assign('formend',
 		$this->CreateFormEnd());
 

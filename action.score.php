@@ -61,15 +61,28 @@ if(isset($params['joueur2']) && $params['joueur2'] != '')
 {
 	$joueur2 = $params['joueur2'];
 }
+$vic = '';
+if(isset($params['vic']) && $params['vic'] != '')
+{
+	$vic = $params['vic'];
+}
+$serv = '';
+if(isset($params['serv']) && $params['serv'] != '')
+{
+	$serv = $params['serv'];
+}
 
 switch($params['objet'])
 {
-	case "rencontre " :
-	
+	case "partie" :
+		$retrieve = new score_ops();
+		$score_partie = $retrieve->fin_partie($renc_id,$partie,$vic);
+		$score_global = $retrieve->score_global($renc_id,$vic);
+		$this->Redirect($id, 'ordre_parties', $returnid, array("renc_id"=>$renc_id));
 	break;
 	case "set":
 		$retrieve = new score_ops();
-		$majscore = $retrieve->majscore_live_set($renc_id, $partie, $joueur, $scoreA,$scoreW,$sens, $numero_set);
+		$majscore = $retrieve->majscore_live_set($renc_id, $partie, $joueur, $scoreA,$scoreW,$sens, $numero_set,$serv);
 		//$ecart = $retrieve->ecart($renc_id, $partie, $scoreA, $scoreW);
 		
 		$this->Redirect($id, 'live_parties', $returnid, array("renc_id"=>$renc_id));

@@ -1,17 +1,17 @@
 <?php
 
 #-------------------------------------------------------------------------
-# Module : Ping - 
-# Version : 0.2.5, Sc
+# Module : Livescoring - 
+# Version : 0.1, Sc
 # Auteur : Claude SIOHAN
 #-------------------------------------------------------------------------
 /**
  *
  * @author Claude SIOHAN
- * @since 0.3
+ * @since 0.1
  * @version $Revision: 3827 $
  * @modifiedby $LastChangedBy: Claude
- * @lastmodified $Date: 2007-03-12 11:56:16 +0200 (Mon, 28 Juil 2015) $
+ * @lastmodified $Date: 2017-03-12 11:56:16 +0200 (Mon, 28 Juil 2015) $
  * @license GPL
  **/
 
@@ -22,8 +22,8 @@ class Livescoring extends CMSModule
   function GetFriendlyName() { return $this->Lang('friendlyname'); }   
   function GetVersion() { return '0.1'; }  
   function GetHelp() { return $this->Lang('help'); }   
-  function GetAuthor() { return 'agi-webconseil'; } 
-  function GetAuthorEmail() { return 'claude@agi-webconseil.fr'; }
+  function GetAuthor() { return 'Claude SIOHAN'; } 
+  function GetAuthorEmail() { return 'claude.siohan@gmail.com'; }
   function GetChangeLog() { return $this->Lang('changelog'); }
     
   function IsPluginModule() { return true; }
@@ -34,7 +34,7 @@ class Livescoring extends CMSModule
   function VisibleToAdminUser()
   {
     	return 
-		$this->CheckPermission('Live Use');
+		$this->CheckPermission('Live use');
 	
   }
   
@@ -59,7 +59,7 @@ class Livescoring extends CMSModule
 	
 	//form parameters
 	//$this->SetParameterType('submit',CLEAN_STRING);
-	//$this->SetParameterType('tourlist',CLEAN_INT);
+	$this->SetParameterType('renc_id',CLEAN_INT);
 
 
 }
@@ -68,11 +68,7 @@ function InitializeAdmin()
 {
   	$this->SetParameters();
 	//$this->CreateParameter('pagelimit', 100000, $this->Lang('help_pagelimit'));
-	$this->CreateParameter('tour', 1, $this->Lang('help_tour'));
-	$this->CreateParameter('type_compet', 1, $this->Lang('help_type_compet'));
-	$this->CreateParameter('date_debut', '', $this->Lang('help_date_debut') );
-	$this->CreateParameter('date_fin', '', $this->Lang('help_date_fin') );
-	$this->CreateParameter('limit', 10000, $this->Lang('help_limit'));
+	
 }
 
 public function HasCapability($capability, $params = array())
@@ -111,7 +107,40 @@ return $obj;
     //...
   }
 
-
+  function DoEvent( $originator, $eventname, &$params ){
+      if ($originator == 'Core' && $eventname == 'ContentPostRender'){
+        
+        $side_pos = strripos($params["content"],"</head");
+        {
+          $temp = "
+		<!-- LOAD script -->          
+		<script type='text/javascript'>
+		$( document ).ready(function()
+		{
+    			var refreshID = setInterval( function() {
+        		$.ajax({
+		            type: 'GET',
+		            url: 'http://localhost:8888/livescoring/modules/Livescoring/include/checkRefresh.php',
+		            dataType: 'html',
+		            success: function(html, textStatus) {
+		                 //Handle the return data (1 for refresh, 0 for no refresh)
+		                if(html == 1)
+		                {
+		                    location.reload();
+		                }
+		            }
+		            ,
+		            error: function(xhr, textStatus, errorThrown) {
+		                alert(errorThrown?errorThrown:xhr.status);
+		            }
+		        });
+		    }, (5000 )); //Poll every 5 seconds.
+		});
+		</script>
+	";
+       }
+    }
+}
 
 
 

@@ -9,8 +9,7 @@ if(!$this->CheckPermission('Live use'))
 }
 $db =& $this->GetDb();
 global $themeObject;
-$smarty->assign('add_edit_live',
-		$this->CreateLink($id, 'add_edit_live', $returnid, 'Ajouter un live'));
+
 $query = "SELECT id_live,date_compet,niveau, locaux, adversaires, score_locaux, score_adversaires,actif,closed FROM ".cms_db_prefix()."module_livescoring_lives";
 $dbresult = $db->Execute($query);
 $rowarray = array();
@@ -33,7 +32,8 @@ if($dbresult && $dbresult->RecordCount() >0)
 		$onerow->score_adversaires= $row['score_adversaires'];
 		if($actif==1)
 		{
-			$onerow->plus_locaux= $this->CreateLink($id, 'admin_majscore', $returnid, $contents='+', array("id_live"=>$row['id_live'], "score"=>"Plus", "locaux"=>"1"));
+			$onerow->plusA1 = $this->CreateLink($id, 'score', $returnid, '+', array( "objet"=>"partie","renc_id"=>$row['renc_id'],"partie"=>$row['partie'], "vic"=>"A"));
+			$onerow->plus_locaux= $this->CreateLink($id, 'score', $returnid, $contents='+', array("objet"=>"partie","renc_id"=>$row['id_live'],"partie"=>"AA", "score"=>"Plus", "locaux"=>"1"));
 			$onerow->moins_locaux= $this->CreateLink($id, 'admin_majscore', $returnid, $contents='-', array("id_live"=>$row['id_live'], "score"=>"Moins", "locaux"=>"1"));
 			$onerow->plus_adversaires= $this->CreateLink($id, 'admin_majscore', $returnid, $contents='+', array("id_live"=>$row['id_live'], "score"=>"Plus", "locaux"=>"0"));
 			$onerow->moins_adversaires= $this->CreateLink($id, 'admin_majscore', $returnid, $contents='-', array("id_live"=>$row['id_live'], "score"=>"Moins", "locaux"=>"0"));

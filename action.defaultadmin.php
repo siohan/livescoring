@@ -1,6 +1,6 @@
 <?php
    if ( !isset($gCms) ) exit; 
-	if (!$this->CheckPermission('Live Use'))
+	if (!$this->CheckPermission('Live use'))
 	{
 		echo $this->ShowErrors($this->Lang('needpermission'));
 		return;
