@@ -80,7 +80,7 @@ class score_ops
 		}
 		
 		
-		//$service = $this->Service($renc_id, $partie)
+
 		$ecart = abs($scoreA - $scoreW);
 		if($ecart >=2)
 		{
